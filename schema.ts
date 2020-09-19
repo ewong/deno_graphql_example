@@ -1,4 +1,5 @@
-import { applyGraphQL, gql, GQLError } from "https://deno.land/x/oak_graphql/mod.ts";
+import { Router, RouterContext } from "https://deno.land/x/oak@v6.2.0/mod.ts";
+import { applyGraphQL, gql, GQLError } from "https://deno.land/x/oak_graphql@0.6.1/mod.ts";
 
 // simulates retained data
 let counter = 0;
@@ -86,11 +87,12 @@ const resolvers = {
 };
 
 export const GraphQLService = async (path: string) => {
-  return await applyGraphQL({
+  return await applyGraphQL<Router>({
+    Router,
     path,
     typeDefs,
     resolvers,
-    context: (ctx) => {
+    context: (ctx: RouterContext) => {
       return {
         req: ctx.request,
         res: ctx.response
